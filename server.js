@@ -8,10 +8,10 @@ const compression = require('compression');
 const authRouter = require('./routes/auth');
 const cartRouter = require('./routes/cart');
 const userRouter = require('./routes/user');
-// const orderRouter = require('./newStructure/routes/order-route');
+const orderRouter = require('./routes/order');
 const productRouter = require('./routes/product');
-// const paymentRouter = require('./newStructure/routes/payment-route');
-// const checkoutRouter = require('./newStructure/routes/checkout-route');
+// const paymentRouter = require('./routes/payment');
+// const checkoutRouter = require('./routes/checkout');
 
 // const options = {
 //     definition: {
@@ -56,7 +56,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
-// app.use('/api/orders', orderRouter);
+app.use('/api/orders', orderRouter);
 // app.use('/api/payments', paymentRouter);
 // app.use('/api/checkout', checkoutRouter);
 
