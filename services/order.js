@@ -1,5 +1,5 @@
-const OrderModel = require('../models/order-model');
-const CartService = require('./cart-service');
+const OrderModel = require('../models/order');
+const CartService = require('./cart');
 
 const OrderModelInstance = new OrderModel;
 const CartServiceInstance = new CartService;
@@ -17,7 +17,7 @@ class OrderService {
             console.log('New order created:', newOrder);
     
             console.log('Adding order to order products...');
-            await OrderModelInstance.addToOrdersProducts(userid, cartid, newOrder.id);
+            await OrderModelInstance.addToOrdersitems(userid, cartid, newOrder.id);
     
             console.log('Fetching single order...');
             const orderCheck = await OrderModelInstance.getSingleOrder(userid, newOrder.id);
@@ -28,7 +28,7 @@ class OrderService {
             console.log('Fetched order:', orderCheck);
     
             console.log('Deleting cart...');
-            const deleteCart = await CartServiceInstance.deleteCart(cartid);
+            const deleteCart = await CartServiceInstance.deleteCart(userid);
             if (deleteCart) {
                 console.log('Cart deleted');
                 return newOrder;
@@ -41,18 +41,18 @@ class OrderService {
         }
     }
 
-    async getMostRecentOrder(id) {
+    async getMostRecentOrder(userid) {
         try {
-            const order = await OrderModelInstance.getMostRecentOrder(id);
+            const order = await OrderModelInstance.getMostRecentOrder(userid);
             return order;
         } catch (err) {
             throw(err);
         }
     }
 
-    async getAllOrders(id) {
+    async getAllOrders(userid) {
         try {
-            const allOrders = await OrderModelInstance.getAllOrders(id);
+            const allOrders = await OrderModelInstance.getAllOrders(userid);
             return allOrders;
         } catch (err) {
             throw(err);
