@@ -7,15 +7,6 @@ const OrderServiceInstance = new OrderService;
 
 const orderRouter = express.Router();
 
-//gets all orders for customer
-orderRouter.get('/history/:id', checkAuthorized, async (req, res, next) => {
-    try {
-        const response = await OrderServiceInstance.getAllOrders(req.params.id);
-        res.json(response);
-    } catch (err) {
-        next(err);
-    }
-});
 
 //creates order from cart
 orderRouter.post('/new/:id/:cartid', checkAuthorized, async (req, res, next) => {
@@ -27,7 +18,17 @@ orderRouter.post('/new/:id/:cartid', checkAuthorized, async (req, res, next) => 
     }
 });
 
-//gets most recent order
+//gets all orders for customer
+orderRouter.get('/history/:id', checkAuthorized, async (req, res, next) => {
+    try {
+        const response = await OrderServiceInstance.getAllOrders(req.params.id);
+        res.json(response);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// gets most recent order
 orderRouter.get('/recent/:id', checkAuthorized, async (req, res, next) => {
     try {
         const response = await OrderServiceInstance.getMostRecentOrder(req.params.id);
