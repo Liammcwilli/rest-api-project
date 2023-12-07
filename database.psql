@@ -1,0 +1,76 @@
+
+CREATE TABLE IF NOT EXISTS users (
+	id SERIAL PRIMARY KEY,
+    email VARCHAR(200),
+	password VARCHAR(200),
+	first_name VARCHAR(200),
+	last_name VARCHAR(200)
+
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+	id SERIAL PRIMARY KEY,
+	totalcost VARCHAR(100000)
+	status VARCHAR(50)
+	userid INTEGER,
+    created TIMESTAMP,
+    modified TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    price BIGINT,
+	description TEXT,
+    category VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+    id SERIAL PRIMARY KEY,
+    userid INTEGER,
+    created TIMESTAMP,
+    modified TIMESTAMP,
+    totalcost VARCHAR(100000)
+);
+
+CREATE TABLE IF NOT EXISTS cartsitems (
+    cartid INTEGER,
+    productid INTEGER,
+    quantity INTEGER,
+    PRIMARY KEY(cartid, productid)
+);
+
+CREATE TABLE IF NOT EXISTS ordersitems (
+    orderid INTEGER,
+    productid INTEGER,
+    quantity INTEGER,
+    PRIMARY KEY(orderid, productid)
+);
+
+
+ALTER TABLE orders
+ADD FOREIGN KEY(userid) REFERENCES user(id);
+
+ALTER TABLE carts
+ADD FOREIGN KEY(userid) REFERENCES user(id);
+
+ALTER TABLE cartsitems
+ADD FOREIGN KEY(cartid) REFERENCES carts(id);
+
+ALTER TABLE cartsitems
+ADD FOREIGN KEY(productid) REFERENCES products(id);
+
+ALTER TABLE ordersitems
+ADD FOREIGN KEY(orderid) REFERENCES orders(id);
+
+ALTER TABLE ordersitems
+ADD FOREIGN KEY(productid) REFERENCES products(id);
+
+INSERT INTO products (id, name, price, description, category)
+VALUES
+    ('Laptop', 1000, 'High-performance laptop with SSD storage and a powerful processor.', 'Electronics'),
+    ('Running Shoes', 80, 'Lightweight and durable shoes for running and fitness activities.', 'Fashion'),
+    ('Blender', 50, 'Versatile blender for making smoothies, shakes, and sauces.', 'Kitchen'),
+    ('Novel', 15, 'Bestselling fiction novel that captures the essence of mystery and adventure.', 'Books'),
+    ('Sunglasses', 40, 'Stylish UV protection sunglasses with polarized lenses.', 'Fashion'),
+    ('Coffee Maker', 90, 'Programmable coffee maker for brewing delicious coffee at home.', 'Kitchen');
