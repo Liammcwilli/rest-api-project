@@ -1,0 +1,511 @@
+
+basePath: "/"
+
+paths:
+  /user/register:
+    post:
+      summary: "Register a new user"
+      tags: [Customer]
+      description: "Register a new user"
+      produces:
+        - "application/json"
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema: 
+              type: object
+              properties: 
+                first_name:   
+                  type: string                  
+                last_name:
+                  type: string                  
+                email: 
+                  type: string                  
+                password: 
+                  type: string   
+                  format: password
+              required: 
+                - first_name
+                - last_name
+                - email
+                - password               
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            properties: 
+              email:
+                type: string
+              date_created: 
+                type: string
+              contact_id: 
+                type: integer
+                nullable: true
+              first_name:
+                type: string
+              last_name:
+                type: string
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /auth/login:
+    post:
+      summary: "Login to a user account"
+      tags: [Auth]
+      description: "Login to a user account"
+      produces:
+        - "application/x-www-form-urlencoded"
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema: 
+              type: object
+              properties:                  
+                email: 
+                  type: string                  
+                password: 
+                  type: string   
+                  format: password
+              required: 
+                - email
+                - password             
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:
+        401:
+          description: 401 Unauthorized
+          schema:
+            type: object
+            items:
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /auth/logout:
+    post:
+      summary: "Logs out a user"
+      tags: [Auth]
+      description: "Logs out a user"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            -
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /products/:
+    get:
+      summary: "Get all products"
+      tags: [Products]
+      description: "Get all products"
+      produces:
+        - "application/json"
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: array
+            properties:
+              id:
+                type: integer
+              name: 
+                type: string
+              price:
+                type: integer
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /products/{productid}:
+    get:
+      summary: "Get a product by id"
+      tags: [Products]
+      description: "Get a product by id"
+      produces:
+        - "application/json"
+      parameters:
+        - name: productid
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name: 
+                type: string
+              price:
+                type: integer
+              image: 
+                type: string
+            
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/new/{id}:
+    post:
+      summary: "Creates a new cart for user by id"
+      tags: [Cart]
+      description: "Creates a new cart for user by id"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:   
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/delete/{id}:
+    delete:
+      summary: "Deletes a cart"
+      tags: [Cart]
+      description: "Deletes a cart"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: cartid
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:   
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/{id}:
+    get: 
+      summary: "Gets all products in a cart by cartId"
+      tags: [Cart]
+      description: "Gets all products in a cart by cartId"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            properties: 
+              name: 
+                type: string
+              price:
+                type: integer
+              quantity: 
+                type: integer
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/add/{id}/{cartid}/{productid}:
+    post:
+      summary: "Adds a product to cart"
+      tags: [Cart]
+      description: "Adds a product to cart using cartid and productid"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: cartid
+          in: path
+          required: true
+        - name: productid
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/addOne/{id}/{cartid}/{productid}:
+    put:
+      summary: "Increases a product quantity in the cart by one"
+      tags: [Cart]
+      description: "Increases a product quantity in the cart by one"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: cartid
+          in: path
+          required: true
+        - name: productid
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/minusOne/{id}/{cartid}/{productid}:
+    put:
+      summary: "Decreases a product quantity in the cart by one"
+      tags: [Cart]
+      description: "Decreases a product quantity in the cart by one"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: cartid
+          in: path
+          required: true
+        - name: productid
+          in: path
+          required: true
+      responses: 
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /cart/remove/{id}/{cartid}/{productid}:
+    delete:
+      summary: "Removes a specific product from cart"
+      tags: [Cart]
+      description: "Removes a specific product from cart"
+      produces: 
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: cartid
+          in: path
+          required: true
+        - name: productid
+          in: path
+          required: true
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            items:
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /orders/new/{id}/{cartid}:
+    post:
+      summary: "Creates a new order from cart"
+      tags: [Orders]
+      description: "Creates a new order from cart"
+      produces: 
+        - "application/json"
+      parameters:
+        - name: customerid
+          in: path
+          required: true
+        - name: cartid
+          in: path
+          required: true
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            properties:
+              customerid:
+                type: integer
+              totalcost:
+                type: varchar
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /orders/recent/{id}:
+    get: 
+      summary: "Gets most recent order by user id"
+      tags: [Orders]
+      description: "Gets most recent order by user id"
+      produces: 
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              totalcost:
+                type: varchar
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /orders/history/{id}:
+    get: 
+      summary: "Gets all orders by user id"
+      tags: [Orders]
+      description: "Gets all orders by user id"
+      produces: 
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: array
+            properties:
+              id:
+                type: integer
+              totalcost:
+                type: varchar
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:
+  /orders/{id}/{orderid}:
+    get: 
+      summary: "Gets a single order by user id and orderid"
+      tags: [Orders]
+      description: "Gets a single order by user id and orderid"
+      produces: 
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: orderid
+          in: path
+          required: true
+      responses:
+        200:
+          description: 200 Success
+          schema:
+            type: object
+            properties:
+              customerid:
+                type: integer
+              totalcost:
+                type: varchar
+        404:
+          description: 404 Not Found
+          schema:
+            type: object
+            items:      
+        500:
+          description: 500 Internal Server Error
+          schema:
+            type: object
+            items:

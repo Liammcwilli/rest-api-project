@@ -1,6 +1,6 @@
 const express = require('express');
-// const swaggerUI = require('swagger-ui-express');
-// const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
@@ -10,31 +10,30 @@ const cartRouter = require('./routes/cart');
 const userRouter = require('./routes/user');
 const orderRouter = require('./routes/order');
 const productRouter = require('./routes/product');
-// const paymentRouter = require('./routes/payment');
-// const checkoutRouter = require('./routes/checkout');
+const checkoutRouter = require('./routes/checkout');
 
-// const options = {
-//     definition: {
-//         openapi: "3.0.0",
-//         info: {
-//             title: "E-commerce REST API",
-//             version: "1.0.0",
-//             description: "A simple e-commerce API"
-//         },
-//         schema: [
-//             "http",
-//             "https"
-//         ],
-//         servers: [
-//             {
-//                 url: "https://jims-ecommerce-rest-api.herokuapp.com/",
-//             }
-//         ],
-//     },
-//     apis: ["./swagger.yml"]
-// }
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "E-commerce REST API",
+            version: "1.0.0",
+            description: "A basic e-commerce API"
+        },
+        schema: [
+            "http",
+            "https"
+        ],
+        servers: [
+            {
+                url: "https://jims-ecommerce-rest-api.herokuapp.com/",
+            }
+        ],
+    },
+    apis: ["./swagger.yml"]
+}
 
-//
+const specs = swaggerJsDoc(options);
 
 const app = express();
 
@@ -44,7 +43,7 @@ const origin = {
 }
 
 app.use(compression());
-// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
 
 app.use(express.json());
 app.use(cors(origin)); 
@@ -57,8 +56,7 @@ app.use('/api/user', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/orders', orderRouter);
-// app.use('/api/payments', paymentRouter);
-// app.use('/api/checkout', checkoutRouter);
+app.use('/api/checkout', checkoutRouter);
 
 app.use((err, req, res, next) => {
     const { message, status } = err;
