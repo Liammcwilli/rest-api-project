@@ -7,9 +7,9 @@ const ProductServiceInstance = new ProductService;
 const productRouter = express.Router();
 
 //get product by id
-productRouter.get('/:productId', async (req, res, next) => {
+productRouter.get('/:productid', async (req, res, next) => {
     try {
-        const response = await ProductServiceInstance.getProductById(req.params.productId);
+        const response = await ProductServiceInstance.getProductById(req.params.productid);
         res.json(response);
     } catch (err) {
         next(err);
