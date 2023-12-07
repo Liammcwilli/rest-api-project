@@ -26,4 +26,25 @@ Getting Started
 Installation: Clone the repository and install dependencies.
 Environment Setup: Configure necessary environment variables (if required).
 API Interaction: Access the API through designated endpoints to perform various operations.
-Contributing
+
+# Usage
+
+Installation:
+
+Run npm install to install reguired dependencies.
+
+Database Setup:
+
+Ensure you have a local PostgreSQL database running.
+Use pgAdmin or any preferred database management tool to interact with the database.
+Refer to the ERD (Entity-Relationship Diagram) in the resources folder to understand the database structure.
+Use the provided database.sql file to create the necessary tables in your PostgreSQL database.
+
+Environment Variables:
+
+Set up your own .env file with the required variables for your local environment.
+Running the App:
+
+Execute npm run start to start the application locally.
+
+Access the API at http://localhost:<your-port> once the app is running.
