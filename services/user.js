@@ -15,76 +15,39 @@ class UserService {
 
     async register(data) {
         try {
+            console.log('Checking existing user...');
             const user = await UserModelInstance.checkExistingEmail(data.email);
             if (!user) {
-                const encryptedPassword = this.encrypt(data.password);
-                const newData = {...data, password: await encryptedPassword}
+                console.log('User not found. Encrypting password...');
+                const encryptedPassword = await this.encrypt(data.password);
+                console.log('Creating new user...');
+                const newData = {...data, password: encryptedPassword}
                 const loginData = await UserModelInstance.createLogin(newData);
                 return loginData;
             } else {
+                console.log('User already exists.');
                 return null;
             }
             
         } catch (err) {
-            throw(err);
+            console.error('Error in register:', err);
+            throw err;
         }
     }
 
-    async googleLoginRegister(data) {
-        try {
-            const user = await UserModelInstance.checkExistingGoogleId(data.google_id);
-            if(user) {
-                return user;
-            } else {
-                const newUser = await UserModelInstance.createLogin(data);
-                return newUser;
-            }
-        } catch (err) {
-            throw(err)
-        }
-    }
-
-    async createContact(custid, data) {
-        try {
-            const contactData = await UserModelInstance.createContact(data);
-            await UserModelInstance.addContactIdForCustomer(custid, contactData[0].id);
-            return contactData;
-            
-        } catch (err) {
-            throw(err);
-        }
-    }
-
-    async amendContact(custid, data) {
-        try {
-            const contactData = await UserModelInstance.checkExistingContact(custid);
-            if (!contactData) return null;
-            await UserModelInstance.amendContact(custid, data);
-            const custData = await UserModelInstance.getCustomerData(custid);
-            return custData;
-            
-        } catch (err) {
-            throw(err);
-        }
-    }
     
     async getCustomerEmail(id) {
         try {
+            console.log('Fetching customer email...');
             const data = UserModelInstance.getCustomerEmail(id);
             return data;
         } catch (err) {
-            throw(err);
+            console.error('Error in getCustomerEmail:', err);
+            throw err;
         }
     }
 
-    async getCustomerData(custid) {
-        try {
-            const data = UserModelInstance.getCustomerData(custid);
-            return data;
-        } catch (err) {
-            throw(err);
-        }
-    }
+
 }
 
 module.exports = UserService;

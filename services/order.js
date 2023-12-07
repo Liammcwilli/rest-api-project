@@ -40,33 +40,45 @@ class OrderService {
             throw(err);
         }
     }
-
     async getMostRecentOrder(userid) {
         try {
+            console.log('Fetching most recent order...');
             const order = await OrderModelInstance.getMostRecentOrder(userid);
+            console.log('Most recent order retrieved successfully.');
             return order;
         } catch (err) {
-            throw(err);
+            console.error('Error in getMostRecentOrder:', err);
+            throw err;
         }
     }
 
     async getAllOrders(userid) {
         try {
+            console.log('Fetching all orders...');
             const allOrders = await OrderModelInstance.getAllOrders(userid);
+            console.log('All orders retrieved successfully.');
             return allOrders;
         } catch (err) {
-            throw(err);
+            console.error('Error in getAllOrders:', err);
+            throw err;
         }
     }
 
     async getSingleOrder(id, orderid) {
         try {
+            console.log('Checking for existing order...');
             const exists = await OrderModelInstance.checkExistingOrder(id, orderid);
-            if(!exists) return null;
+            if (!exists) {
+                console.log('Order does not exist.');
+                return null;
+            }
+            console.log('Fetching single order...');
             const order = await OrderModelInstance.getSingleOrder(id, orderid);
+            console.log('Single order retrieved successfully.');
             return order;
         } catch (err) {
-            throw(err);
+            console.error('Error in getSingleOrder:', err);
+            throw err;
         }
     }
 }

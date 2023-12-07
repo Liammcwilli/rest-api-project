@@ -8,33 +8,51 @@ class CartService {
     // create cart by id
     async createCart(id) {
         try {
+            console.log('Checking existing cart...');
             const cart = await CartModelInstance.checkExistingCart(id);
-            if (cart) return cart;
+            if (cart) {
+                console.log('Cart already exists.');
+                return cart;
+            }
+            console.log('Creating new cart...');
             const newCart = await CartModelInstance.createCart(id);
+            console.log('New cart created.');
             return newCart;
         } catch (err) {
-            throw(err);
+            console.error('Error in createCart:', err);
+            throw err;
         }
     } 
-    // check cart by id
+
     async checkCart(id) {
         try {
+            console.log('Checking cart by ID...');
             const cart = await CartModelInstance.checkExistingCart(id);
-            if (!cart) return null;
+            if (!cart) {
+                console.log('Cart not found.');
+                return null;
+            }
+            console.log('Cart found.');
             return cart;
         } catch (err) {
-            throw(err);
+            console.error('Error in checkCart:', err);
+            throw err;
         }
     }
 
-    // checks 
     async checkProduct(id, productid) {
         try {
+            console.log('Checking product in cart...');
             const product = await CartModelInstance.checkExistingProductInCart(id, productid);
-            if (!product) return null;
+            if (!product) {
+                console.log('Product not found in cart.');
+                return null;
+            }
+            console.log('Product found in cart.');
             return true;
         } catch (err) {
-            throw(err);
+            console.error('Error in checkProduct:', err);
+            throw err;
         }
     }
 
@@ -139,21 +157,33 @@ class CartService {
     
     async changeQuantity(id, cartid, productid, plusOrMinus) {
         try {
+            console.log('Changing product quantity in cart...');
             let product;
-            if(!this.checkCart(id) || !this.checkProduct(id, productid)) return null;
+            if (!this.checkCart(id) || !this.checkProduct(id, productid)) {
+                console.log('Cart or product does not exist.');
+                return null;
+            }
             if (plusOrMinus === 'plus') {
+                console.log('Increasing product quantity in cart...');
                 product = await CartModelInstance.addOneProduct(cartid, productid);
             } else if (plusOrMinus === 'minus') {
+                console.log('Decreasing product quantity in cart...');
                 product = await CartModelInstance.minusOneProduct(cartid, productid);
             } else {
+                console.log('No operation specified.');
                 return;
             }
-            if(product) await CartModelInstance.updateTotalCost(cartid);
+            if (product) {
+                console.log('Updating total cost...');
+                await CartModelInstance.updateTotalCost(cartid);
+            }
+            console.log('Fetching all products from cart...');
             const cartProducts = await CartModelInstance.getAllProductsFromCart(cartid);
+            console.log('Products in cart retrieved successfully.');
             return cartProducts;
-            
         } catch (err) {
-            throw(err);
+            console.error('Error in changeQuantity:', err);
+            throw err;
         }
     }
     
